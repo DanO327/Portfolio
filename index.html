@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio – Dan Ortega</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-texto: #ffffff;
+      --color-principal: #cc5200;
+      --color-boton-hover: #e67333;
+      --color-borde-gradiente-start: rgba(204,82,0,0.3);
+      --color-borde-gradiente-end: rgba(51,51,51,0.8);
+    }
+
+    * { box-sizing: border-box; margin:0; padding:0; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: url('fondo.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: var(--color-texto);
+      min-height: 100vh;
+      display: flex;
+    }
+
+    a { text-decoration: none; }
+
+    /* Splash */
+    #splash {
+      position: fixed; top:0; left:0; right:0; bottom:0;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      background-color: #222; z-index: 9999; transition: opacity 0.5s ease;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    #splash h1 { font-size: 3rem; color: var(--color-principal); margin-bottom: 1rem; }
+    #splash p { font-size: 1.5rem; margin-bottom: 2rem; }
+    #splash button {
+      padding: 0.75rem 2rem; font-size: 1.2rem; border: none; border-radius: 9999px;
+      background-color: var(--color-principal); color: var(--color-texto); cursor: pointer;
+      transition: background-color 0.3s, transform 0.3s;
+    }
+    #splash button:hover { background-color: var(--color-boton-hover); transform: scale(1.05); }
+
+    #portfolio { display: none; flex: 1; }
+
+    /* Menu lateral fijo */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 220px;
+      height: 100vh;
+      padding: 2rem 1rem;
+      background: linear-gradient(180deg, rgba(0,0,0,0.95) 0%, rgba(204,82,0,0.8) 100%);
+      border-right: 2px solid var(--color-principal);
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      z-index: 999;
+    }
+
+    nav a {
+      color: var(--color-texto);
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      transition: background-color 0.3s, transform 0.3s;
+      border-radius: 0.5rem;
+    }
+    nav a:hover { background-color: rgba(204,82,0,0.4); transform: scale(1.05); }
+
+    /* Contenido principal */
+    .content {
+      flex: 1;
+      padding: 2rem;
+      margin-left: 220px; /* espacio para menú lateral fijo */
+    }
+
+    /* Sobre mí */
+    #sobre-mi {
+      margin-bottom: 3rem;
+    }
+    #sobre-mi .top-line {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    #sobre-mi .top-line img {
+      width: 120px; height:120px;
+      border-radius: 50%;
+      border: 4px solid var(--color-principal);
+      object-fit: cover;
+    }
+    #sobre-mi .top-line h1 {
+      margin:0;
+      color: var(--color-principal);
+      font-size:1.8rem;
+    }
+    #sobre-mi .bio {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    #sobre-mi .bio h2 { margin-bottom:1rem; color: var(--color-principal); }
+    #sobre-mi .bio p { line-height:1.6; margin-bottom:1rem; }
+
+    /* Proyectos */
+    h2.proyectos { color: var(--color-principal); text-align: center; margin-bottom: 2rem; }
+
+    .projects-grid { display: flex; flex-wrap: wrap; gap: 2rem; justify-content: flex-start; }
+
+    .card {
+      background: linear-gradient(135deg, var(--color-borde-gradiente-end), var(--color-borde-gradiente-start));
+      border: 1px solid;
+      border-image: linear-gradient(45deg, var(--color-borde-gradiente-end), var(--color-borde-gradiente-start)) 1;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 0 8px rgba(204,82,0,0.3);
+      transition: transform 0.3s, box-shadow 0.3s, background-position 0.5s;
+      background-size: 200% 200%;
+      background-position: left top;
+      color: var(--color-texto);
+    }
+    .card:hover { transform: translateY(-5px); box-shadow: 0 0 15px rgba(204,82,0,0.6); background-position: right bottom; }
+    .card h3 { margin-bottom: 0.5rem; color: var(--color-principal); font-size: 1.5rem; }
+    .card p, .card li { color: var(--color-texto); margin-bottom: 0.5rem; }
+    .card ul { padding-left: 1.5rem; margin-bottom: 1rem; }
+    .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 0.5rem; margin-bottom: 1rem; }
+    .card .buttons { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .card .buttons a {
+      flex: 1; padding: 0.5rem 1rem; border-radius: 0.5rem; text-align: center;
+      color: var(--color-texto); font-weight: 600; background-color: var(--color-principal);
+      transition: background-color 0.3s, transform 0.3s;
+    }
+    .card .buttons a:hover { background-color: var(--color-boton-hover); transform: scale(1.05); }
+
+    /* Media Queries – Responsividad */
+    @media (max-width: 800px) {
+      body { flex-direction: column; }
+
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        justify-content: space-around;
+        border-right: none;
+        border-bottom: 2px solid var(--color-principal);
+        padding: 1rem 0;
+      }
+
+      .content {
+        margin-left: 0;
+        padding: 1rem;
+        padding-top: 4rem; /* dejar espacio debajo del menú fijo horizontal */
+      }
+
+      #sobre-mi .top-line { flex-direction: column; align-items: center; text-align: center; }
+      #sobre-mi .top-line h1 { margin-top: 0.5rem; }
+
+      /* Ajustar grid de proyectos */
+      .projects-grid {
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: center;
+        padding: 0 1rem;
+      }
+
+      /* Ajustar tarjetas */
+      .card { width: 100%; max-width: 100%; }
+
+      /* Ajustar imágenes dentro de tarjetas */
+      .card img { width: 100%; height: auto; }
+
+      /* Splash */
+      #splash h1 { font-size: 2.5rem; }
+      #splash p { font-size: 1.2rem; }
+      #splash button { font-size: 1rem; padding: 0.5rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Splash screen -->
+  <div id="splash">
+    <h1>Hola, soy Dan</h1>
+    <p>Web Developer & Frontend Enthusiast 💻✨</p>
+    <button id="enterBtn">Entrar al Portfolio</button>
+  </div>
+
+  <!-- Portfolio -->
+  <div id="portfolio">
+    <!-- Menú lateral -->
+    <nav>
+      <a href="#sobre-mi">Sobre mí</a>
+      <a href="#projects">Proyectos</a>
+      <a href="CV.pdf" target="_blank">Descargar CV</a>
+    </nav>
+
+    <!-- Contenido principal -->
+    <div class="content">
+      <!-- Sobre mí -->
+      <section id="sobre-mi">
+        <div class="top-line">
+          <img src="mi-foto.jpg" alt="Foto de Dan Ortega">
+          <h1>Dan Ortega – Web Developer</h1>
+        </div>
+        <div class="bio">
+          <h2>Sobre mí</h2>
+          <p>
+            Soy un desarrollador web con una sólida base en <strong>frontend</strong> y creciente experiencia en <strong>backend</strong>. 
+            Me apasiona crear aplicaciones funcionales, intuitivas y bien estructuradas, donde el diseño y el código se unan 
+            para ofrecer experiencias digitales atractivas.
+          </p>
+          <p>
+            Cuento con formación en <strong>Desarrollo de Aplicaciones Web</strong> y experiencia profesional previa en 
+            <em>gestión informática y soporte administrativo</em> durante más de 10 años, lo que me ha permitido desarrollar 
+            competencias como <strong>resolución de problemas, organización, adaptabilidad y trabajo en equipo</strong>.
+          </p>
+          <p>
+            Entre mis habilidades técnicas destaco el manejo de <strong>HTML, CSS, JavaScript, Python, SQL</strong>, así como 
+            experiencia con <strong>React</strong>, <strong>Node.js</strong>, <strong>Git/GitHub</strong> y diferentes entornos 
+            de desarrollo (VS Code, IntelliJ, NetBeans). También he trabajado con <strong>bases de datos</strong> (MySQL, Oracle, DB Browser).
+          </p>
+          <p>
+            🚀 Actualmente estoy abierto a oportunidades de prácticas o proyectos colaborativos donde pueda aplicar mis conocimientos, 
+            seguir aprendiendo y aportar valor a equipos dinámicos.
+          </p>
+        </div>
+      </section>
+
+      <!-- Proyectos -->
+      <section id="projects">
+        <h2 class="proyectos">Proyectos Destacados</h2>
+        <div class="projects-grid">
+          <div class="card">
+            <h3>Gestor de Tareas Avanzado</h3>
+            <p>Aplicación web interactiva para organizar tareas con prioridad, filtros, edición, búsqueda y contador de pendientes.</p>
+            <img src="Gestor_de_tareas/preview.png" alt="Preview Gestor de Tareas">
+            <ul>
+              <li>Añadir tareas con Enter o botón</li>
+              <li>Prioridad y resaltado automático</li>
+              <li>Orden inteligente y dinámico</li>
+              <li>Editar y borrar tareas con botones</li>
+              <li>Filtros y búsqueda en tiempo real</li>
+              <li>Contador de tareas pendientes</li>
+              <li>Modo oscuro</li>
+            </ul>
+            <div class="buttons">
+              <a href="Gestor_de_tareas/Gestor_de_tareas.html" target="_blank">Ver Proyecto</a>
+              <a href="https://github.com/dano327/portfolio" target="_blank">Ver en GitHub</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const splash = document.getElementById('splash');
+    const portfolio = document.getElementById('portfolio');
+    const enterBtn = document.getElementById('enterBtn');
+
+    enterBtn.addEventListener('click', () => {
+      splash.style.opacity = '0';
+      setTimeout(() => {
+        splash.style.display = 'none';
+        portfolio.style.display = 'flex';
+      }, 500);
+    });
+  </script>
+
+</body>
+</html>
